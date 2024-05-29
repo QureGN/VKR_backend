@@ -19,15 +19,18 @@ from django.urls import path
 import app.views as views 
 from django.conf.urls.static import static 
 from django.conf import settings 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
  
 urlpatterns = [ 
     path('admin/', admin.site.urls),
     
     
     path('upload/<str:folder_name>/', views.upload_file),  # POST
-    path('listObjectsObj/', views.Obj_from_minio), # GET
+    # path('listObjectsObj/', views.Obj_from_minio), # GET
     path('download/<str:folder_name>/<str:file_name>/', views.download_file_from_minio), # GET
     path('delete/<str:bucket_name>/<str:file_name>/', views.delete_file), # DELETE
+    path('update/<str:bucket_name>/<str:old_file_name>/', views.update_file), # DELETE
     path('binary/search/<str:folder_name>/', views.search_binary),
 
     path('trees/review/', views.jsonTrees),
@@ -38,17 +41,24 @@ urlpatterns = [
     path('trees/create/', views.create_tree),  # POST
 
     path('folders/review/', views.folders), # GET
+   
     path('folders/create/', views.create_folder), # post
     path('folders/review/<str:folder_id>/', views.get_folder_by_id),
     path('folders/search/', views.search_folders),  # GET
     # path('folders/<int:folder_id>/<str:folder_name>/', views.get_folder_by_id),  # GET
     path('folders/<str:folder_id>/', views.get_folder_by_idTree),  # GET
+    path('folders/files/<int:folder_id>/<str:folder_name>/', views.get_files),  # GET
     path('folders/binary/<str:folder_name>/', views.get_folder_by_idBin),  # GET
-    path('folders/update/<int:folder_id>/<str:folder_name>/', views.update_folder),  # PUT
-    path('folders/delete/<int:folder_id>/<str:folder_name>/', views.delete_folder),  # DELETE
+    path('folders/update/<int:folder_id>/<str:folder_name>/', views.update_folder),
+    path('folders/share/<int:folder_id>/', views.share_folder),
+    path('folders/delete/<int:folder_id>/<str:folder_name>/', views.delete_folder),  # DELETE  
     # path('folders/create/', views.folders),  # POST
      
     # path('api/products/search/', views.create_tree),  # GET 
     # path('api/products/search1/', views.jsonTrees), 
     # path('api/products/search2/', views.TreesViewSet), 
+    # Набор методов для аутентификации и авторизации
+    path("api/register/", views.register),
+    path("api/login/", views.login),
+    
 ]

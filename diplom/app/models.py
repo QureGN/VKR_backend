@@ -1,8 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Folders(models.Model):
     name_folder = models.CharField(max_length=30, verbose_name="Название_папки")
-
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Владелец')
+    shared = models.ManyToManyField(User, related_name='Другие_владельцы', blank=True)
+    
     class Meta:
         managed = True
         db_table = 'folders'
